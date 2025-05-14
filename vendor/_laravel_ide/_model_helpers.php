@@ -319,6 +319,7 @@ namespace App\Models {
      *
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
+     * @property string $tanggal_selesai
      * @property string $request_date
      * @property string $reason
      * @property mixed $kategori_perizinan
@@ -332,6 +333,7 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Permission>|Permission whereKategoriPerizinan($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Permission>|Permission whereReason($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Permission>|Permission whereRequestDate($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Permission>|Permission whereTanggalSelesai($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Permission>|Permission whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Permission>|Permission whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Permission>|Permission newModelQuery()

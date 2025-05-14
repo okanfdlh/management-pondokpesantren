@@ -17,6 +17,7 @@ class Permission extends Model
         'kategori_perizinan',    // Meninggal, Sakit, Haji/Umroh, dll
         'reason',
         'request_date',
+        'tanggal_selesai',
     ];
 
     // Relasi ke model Santri

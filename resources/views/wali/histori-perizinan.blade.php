@@ -17,6 +17,7 @@
                             <p class="text-sm text-gray-600">Kategori: {{ $permission->kategori_perizinan }}</p>
                             <p class="text-sm text-gray-600">Alasan: {{ $permission->reason }}</p>
                             <p class="text-sm text-gray-600">Tanggal Pengajuan: {{ $permission->request_date }}</p>
+                            <p class="text-sm text-gray-600">Tanggal Selesai: {{ $permission->tanggal_selesai }}</p>
                             <p class="text-sm text-gray-600">Status: 
                                 <span class="font-semibold {{ $permission->status == 'Diproses' ? 'text-yellow-500' : ($permission->status == 'Diizinkan' ? 'text-green-600' : 'text-red-600') }}">
                                     {{ $permission->status }}

@@ -55,6 +55,7 @@
         <a href="{{ url('/admin/riwayat-prestasi') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Riwayat Prestasi</a>
 
         <span class="block text-xs text-white/50 mt-4">Perizinan</span>
+        {{-- <a href="{{ url('/admin/jenis-perizinan') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Jenis Perizinan</a> --}}
         <a href="{{ url('/admin/pengajuan-masuk') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Pengajuan Masuk</a>
         <a href="{{ url('/admin/riwayat-perizinan') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Riwayat Perizinan</a>
 

@@ -10,6 +10,7 @@
         <div><strong>Kategori Perizinan:</strong> {{ $permission->kategori_perizinan }}</div>
         <div><strong>Alasan:</strong> {{ $permission->reason }}</div>
         <div><strong>Tanggal Pengajuan:</strong> {{ $permission->request_date }}</div>
+        <div><strong>Tanggal Selesai:</strong> {{ $permission->tanggal_selesai }}</div>
         <div><strong>Status:</strong> {{ $permission->status }}</div>
     </div>
 

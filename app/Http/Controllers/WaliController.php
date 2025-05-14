@@ -30,6 +30,7 @@ class WaliController extends Controller
             'kategori_perizinan' => 'required|in:Meninggal,Sakit,Haji/Umroh,Menikah,Aqiqah/Khitanan,Wisuda,Tugas/Kegiatan',
             'reason' => 'required|string',
             'request_date' => 'required|date',
+            'tanggal_selesai' => 'required|date',
         ]);
 
         Permission::create([
@@ -38,19 +39,20 @@ class WaliController extends Controller
             'kategori_perizinan' => $request->kategori_perizinan,
             'reason' => $request->reason,
             'request_date' => $request->request_date,
+            'tanggal_selesai' => $request->tanggal_selesai,
         ]);
 
         return redirect()->route('wali.perizinan.form')->with('success', 'Pengajuan berhasil dikirim.');
     }
     public function historiPerizinan()
-{
-    $permissions = Permission::with('santri')->get(); // Mengambil semua data perizinan bersama dengan data santri
-    return view('wali.histori-perizinan', compact('permissions'));
-}
-public function showPermission($id)
-{
-    $permission = Permission::with('santri')->findOrFail($id);
-    return view('wali.show-perizinan', compact('permission'));
-}
+    {
+        $permissions = Permission::with('santri')->get(); // Mengambil semua data perizinan bersama dengan data santri
+        return view('wali.histori-perizinan', compact('permissions'));
+    }
+    public function showPermission($id)
+    {
+        $permission = Permission::with('santri')->findOrFail($id);
+        return view('wali.show-perizinan', compact('permission'));
+    }
 
 }

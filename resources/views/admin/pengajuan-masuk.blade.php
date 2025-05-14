@@ -24,6 +24,7 @@
                     <th class="border px-4 py-2">Kategori</th>
                     <th class="border px-4 py-2">Alasan</th>
                     <th class="border px-4 py-2">Tanggal Permintaan</th>
+                    <th class="border px-4 py-2">Tanggal Selesai</th>
                     {{-- <th class="border px-4 py-2">Status</th> --}}
                     <th class="border px-4 py-2">Aksi</th>
                 </tr>
@@ -35,6 +36,7 @@
                         <td class="border px-4 py-2">{{ $permission->kategori_perizinan }}</td>
                         <td class="border px-4 py-2">{{ $permission->reason }}</td>
                         <td class="border px-4 py-2">{{ \Carbon\Carbon::parse($permission->request_date)->format('d M Y') }}</td>
+                        <td class="border px-4 py-2">{{ \Carbon\Carbon::parse($permission->tanggal_selesai)->format('d M Y') }}</td>
                         <td class="border px-4 py-2">
                             <form action="{{ route('admin.update-status-perizinan', $permission->id) }}" method="POST" class="flex space-x-2">
                                 @csrf
