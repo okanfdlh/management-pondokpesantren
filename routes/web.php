@@ -48,6 +48,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/pelanggaran/{id}/edit', [AdminController::class, 'editPelanggaran'])->name('admin.edit-pelanggaran');
         Route::put('/pelanggaran/{id}', [AdminController::class, 'updatePelanggaran'])->name('admin.update-pelanggaran');
         Route::delete('/pelanggaran/{id}', [AdminController::class, 'deletePelanggaran'])->name('admin.delete-pelanggaran');
+        // Route::get('/admin/jenis-pelanggaran', [AdminController::class, 'jenisPelanggaran'])->name('admin.jenis-pelanggaran');
+        Route::post('/jenis-pelanggaran', [AdminController::class, 'storeJenisPelanggaran'])->name('admin.jenis-pelanggaran.store');
+        Route::get('/jenis-pelanggaran', [AdminController::class, 'jenisPelanggaran'])->name('admin.jenis-pelanggaran');
+
 
         // Achievement
         // Route::get('/jenis-prestasi', [AdminController::class, 'jenisPrestasi']);

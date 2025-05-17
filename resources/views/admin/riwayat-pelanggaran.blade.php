@@ -15,8 +15,8 @@
             <thead>
                 <tr class="bg-gray-100 text-gray-700">
                     <th class="border px-6 py-3 text-left text-sm font-medium">Santri</th>
+                    <th class="border px-6 py-3 text-left text-sm font-medium">Kategori</th>
                     <th class="border px-6 py-3 text-left text-sm font-medium">Jenis Pelanggaran</th>
-                    <th class="border px-6 py-3 text-left text-sm font-medium">Deskripsi</th>
                     <th class="border px-6 py-3 text-left text-sm font-medium">Tanggal</th>
                     <th class="border px-6 py-3 text-left text-sm font-medium">Aksi</th>
                 </tr>
@@ -25,8 +25,13 @@
                 @forelse ($violations as $v)
                     <tr class="hover:bg-gray-50 transition">
                         <td class="border px-6 py-3">{{ $v->santri->nama }}</td>
-                        <td class="border px-6 py-3">{{ $v->violation_type }}</td>
-                        <td class="border px-6 py-3">{{ $v->description ?? '-' }}</td>
+                        <td class="border px-6 py-3">
+                            {{ $v->violationDetail?->category?->name ?? '-' }}
+                        </td>
+
+                        <td class="border px-6 py-3">
+                            {{ $v->violationDetail->name ?? $v->description }}
+                        </td>
                         <td class="border px-6 py-3">{{ \Carbon\Carbon::parse($v->date)->format('d M Y') }}</td>
                         <td class="border px-6 py-3">
                             <div class="flex items-center space-x-3">

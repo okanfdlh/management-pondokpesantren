@@ -58,10 +58,10 @@
             <label for="request_date" class="block font-medium text-gray-700 mb-1">Tanggal Pengajuan</label>
             <input type="date" name="request_date" id="request_date" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500" required>
         </div>
-        <div>
+        {{-- <div>
             <label for="tanggal_selesai" class="block font-medium text-gray-700 mb-1">Tanggal Selesai</label>
             <input type="date" name="tanggal_selesai" id="tanggal_selesai" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500" required>
-        </div>
+        </div> --}}
 
         <div class="text-right">
             <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">

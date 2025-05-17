@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('reason');
             $table->date('request_date');
             $table->date('tanggal_selesai');
+            $table->text('catatan');
             $table->timestamps();
         });
 

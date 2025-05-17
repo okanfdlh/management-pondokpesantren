@@ -9,8 +9,8 @@ use App\Models\User;
 use App\Models\Achievement;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Permission;
-
-
+use App\Models\ViolationCategory;
+use App\Models\ViolationDetail;
 
 class AdminController extends Controller
 {
@@ -149,44 +149,75 @@ class AdminController extends Controller
     public function inputPelanggaran()
     {
         $santris = Santri::all();
-        return view('admin.input-pelanggaran', compact('santris'));
+        $categories = ViolationCategory::with('details')->get();
+        return view('admin.input-pelanggaran', compact('santris', 'categories'));
     }
 
     public function storePelanggaran(Request $request)
     {
         $request->validate([
             'santri_id' => 'required|exists:santris,id',
-            'violation_type' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'violation_detail_id' => 'nullable|exists:violation_details,id',
             'date' => 'required|date',
         ]);
 
-        Violation::create($request->all());
+        $detail = ViolationDetail::with('category')->find($request->violation_detail_id);
+
+        Violation::create([
+            'santri_id' => $request->santri_id,
+            'violation_type' => $detail && $detail->category ? $detail->category->name : 'lainnya',
+            'description' => $detail ? $detail->name : $request->description,
+            'date' => $request->date,
+            'violation_detail_id' => $request->violation_detail_id
+        ]);
+
+
 
         return redirect()->back()->with('success', 'Pelanggaran berhasil ditambahkan!');
     }
 
     public function editPelanggaran($id)
     {
-        $pelanggaran = Violation::findOrFail($id);
+        $pelanggaran = Violation::with('violationDetail')->findOrFail($id);
         $santris = Santri::all();
-        return view('admin.edit-pelanggaran', compact('pelanggaran', 'santris'));
+        $categories = ViolationCategory::with('details')->get();
+        return view('admin.edit-pelanggaran', compact('pelanggaran', 'santris', 'categories'));
     }
+
 
     public function updatePelanggaran(Request $request, $id)
     {
         $request->validate([
             'santri_id' => 'required|exists:santris,id',
-            'violation_type' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'violation_detail_id' => 'nullable|exists:violation_details,id',
             'date' => 'required|date',
+            'description' => 'nullable|string',
+            'violation_type' => 'nullable|string|max:255',
         ]);
 
         $pelanggaran = Violation::findOrFail($id);
-        $pelanggaran->update($request->all());
+
+        // Jika violation_detail_id diisi, ambil kategori dan nama detail
+        if ($request->violation_detail_id) {
+            $detail = ViolationDetail::with('category')->find($request->violation_detail_id);
+            $pelanggaran->violation_detail_id = $request->violation_detail_id;
+            $pelanggaran->violation_type = $detail && $detail->category ? $detail->category->name : $request->violation_type;
+            $pelanggaran->description = $detail ? $detail->name : $request->description;
+        } else {
+            // Jika tidak ada detail, pakai data manual dari form
+            $pelanggaran->violation_detail_id = null;
+            $pelanggaran->violation_type = $request->violation_type;
+            $pelanggaran->description = $request->description;
+        }
+
+        $pelanggaran->santri_id = $request->santri_id;
+        $pelanggaran->date = $request->date;
+
+        $pelanggaran->save();
 
         return redirect()->route('admin.riwayat-pelanggaran')->with('success', 'Data pelanggaran berhasil diperbarui.');
     }
+
 
     public function deletePelanggaran($id)
     {
@@ -198,9 +229,33 @@ class AdminController extends Controller
 
     public function riwayatPelanggaran()
     {
-        $violations = Violation::with('santri')->latest()->get();
+        $violations = Violation::with(['santri', 'violationDetail.category'])->latest()->get();
         return view('admin.riwayat-pelanggaran', compact('violations'));
     }
+
+
+    public function jenisPelanggaran()
+    {
+        $categories = ViolationCategory::with('details')->get();
+        return view('admin.jenis-pelanggaran', compact('categories'));
+    }
+
+    public function storeJenisPelanggaran(Request $request)
+    {
+        $request->validate([
+            'category' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+        ]);
+
+        $category = ViolationCategory::firstOrCreate(['name' => strtolower($request->category)]);
+        ViolationDetail::create([
+            'violation_category_id' => $category->id,
+            'name' => $request->name,
+        ]);
+
+        return redirect()->back()->with('success', 'Jenis pelanggaran berhasil ditambahkan.');
+    }
+
 
 
     // Prestasi

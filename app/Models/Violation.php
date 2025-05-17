@@ -15,10 +15,16 @@ class Violation extends Model
         'violation_type',
         'description',
         'date',
+        'violation_detail_id',
     ];
 
     public function santri()
     {
         return $this->belongsTo(Santri::class, 'santri_id');
     }
+    public function violationDetail()
+    {
+        return $this->belongsTo(ViolationDetail::class, 'violation_detail_id');
+    }
+
 }

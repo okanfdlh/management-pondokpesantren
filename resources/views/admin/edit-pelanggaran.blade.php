@@ -20,12 +20,25 @@
         </div>
 
         <div class="mb-4">
-            <label for="violation_type" class="block text-sm font-medium">Jenis Pelanggaran</label>
-            <input type="text" name="violation_type" value="{{ $pelanggaran->violation_type }}" class="w-full border rounded p-2">
-        </div>
+        <label for="violation_detail_id" class="block text-sm font-medium">Kategori Pelanggaran</label>
+        <select name="violation_detail_id" id="violation_detail_id" class="w-full border rounded p-2">
+            <option value="">-- Pilih Kategori Pelanggaran --</option>
+            @foreach ($categories as $category)
+                <optgroup label="{{ $category->name }}">
+                    @foreach ($category->details as $detail)
+                        <option value="{{ $detail->id }}"
+                            {{ $pelanggaran->violation_detail_id == $detail->id ? 'selected' : '' }}>
+                            {{ $detail->name }}
+                        </option>
+                    @endforeach
+                </optgroup>
+            @endforeach
+        </select>
+    </div>
+
 
         <div class="mb-4">
-            <label for="description" class="block text-sm font-medium">Deskripsi</label>
+            <label for="description" class="block text-sm font-medium">Deskripsi Tambahan (opsional)</label>
             <textarea name="description" class="w-full border rounded p-2">{{ $pelanggaran->description }}</textarea>
         </div>
 

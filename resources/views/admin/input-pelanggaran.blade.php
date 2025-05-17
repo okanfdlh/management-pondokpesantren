@@ -28,12 +28,17 @@
         </div>
 
         <div class="mb-4">
-            <label for="violation_type" class="block font-semibold">Jenis Pelanggaran</label>
-            <input type="text" name="violation_type" id="violation_type" value="{{ old('violation_type') }}"
-                class="w-full border rounded p-2">
-            @error('violation_type')
-                <div class="text-red-600 text-sm">{{ $message }}</div>
-            @enderror
+            <label for="violation_detail_id" class="block font-semibold">Detail Pelanggaran</label>
+            <select name="violation_detail_id" id="violation_detail_id" class="w-full border rounded p-2">
+                <option value="">-- Pilih Pelanggaran --</option>
+                @foreach ($categories as $category)
+                    <optgroup label="{{ ucfirst($category->name) }}">
+                        @foreach ($category->details as $detail)
+                            <option value="{{ $detail->id }}">{{ $detail->name }}</option>
+                        @endforeach
+                    </optgroup>
+                @endforeach
+            </select>
         </div>
 
         <div class="mb-4">
@@ -53,6 +58,9 @@
                 <div class="text-red-600 text-sm">{{ $message }}</div>
             @enderror
         </div>
+        <div class="mb-4">
+    
+
 
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
             Simpan

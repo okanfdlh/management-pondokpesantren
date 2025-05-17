@@ -30,7 +30,7 @@ class WaliController extends Controller
             'kategori_perizinan' => 'required|in:Meninggal,Sakit,Haji/Umroh,Menikah,Aqiqah/Khitanan,Wisuda,Tugas/Kegiatan',
             'reason' => 'required|string',
             'request_date' => 'required|date',
-            'tanggal_selesai' => 'required|date',
+            // 'tanggal_selesai' => 'required|date',
         ]);
 
         Permission::create([
@@ -39,7 +39,7 @@ class WaliController extends Controller
             'kategori_perizinan' => $request->kategori_perizinan,
             'reason' => $request->reason,
             'request_date' => $request->request_date,
-            'tanggal_selesai' => $request->tanggal_selesai,
+            // 'tanggal_selesai' => $request->tanggal_selesai,
         ]);
 
         return redirect()->route('wali.perizinan.form')->with('success', 'Pengajuan berhasil dikirim.');

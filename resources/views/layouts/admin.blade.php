@@ -45,7 +45,7 @@
         <a href="{{ url('/admin/data-wali') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Data Wali Santri</a>
 
         <span class="block text-xs text-white/50 mt-4">Pelanggaran</span>
-        <a href="{{ url('/admin/jenis-pelanggaran') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Jenis Pelanggaran</a>
+        <a href="{{ route('admin.jenis-pelanggaran') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Jenis Pelanggaran</a>
         <a href="{{ url('/admin/input-pelanggaran') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Input Pelanggaran</a>
         <a href="{{ url('/admin/riwayat-pelanggaran') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Riwayat Pelanggaran</a>
 
