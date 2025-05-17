@@ -255,6 +255,27 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Jenis pelanggaran berhasil ditambahkan.');
     }
+    public function updateJenisPelanggaran(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $detail = ViolationDetail::findOrFail($id);
+        $detail->name = $request->name;
+        $detail->save();
+
+        return redirect()->back()->with('success', 'Jenis pelanggaran berhasil diperbarui.');
+    }
+
+    public function deleteJenisPelanggaran($id)
+    {
+        $detail = ViolationDetail::findOrFail($id);
+        $detail->delete();
+
+        return redirect()->back()->with('success', 'Jenis pelanggaran berhasil dihapus.');
+    }
+
 
 
 

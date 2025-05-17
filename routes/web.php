@@ -51,6 +51,10 @@ Route::middleware(['auth'])->group(function () {
         // Route::get('/admin/jenis-pelanggaran', [AdminController::class, 'jenisPelanggaran'])->name('admin.jenis-pelanggaran');
         Route::post('/jenis-pelanggaran', [AdminController::class, 'storeJenisPelanggaran'])->name('admin.jenis-pelanggaran.store');
         Route::get('/jenis-pelanggaran', [AdminController::class, 'jenisPelanggaran'])->name('admin.jenis-pelanggaran');
+        // Jenis pelanggaran
+        Route::put('/jenis-pelanggaran/{id}', [AdminController::class, 'updateJenisPelanggaran'])->name('admin.jenis-pelanggaran.update');
+        Route::delete('/jenis-pelanggaran/{id}', [AdminController::class, 'deleteJenisPelanggaran'])->name('admin.jenis-pelanggaran.delete');
+
 
 
         // Achievement
