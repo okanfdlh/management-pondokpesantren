@@ -103,7 +103,7 @@ class AdminController extends Controller
     }
 
     // Data Wali Santri
-    public function dataWali()
+    public function dataWaliSantri()
     {
         $users = User::where('role', 'wali')->get(); // filter hanya wali
         return view('admin.wali-santri.data-walisantri', compact('users'));
@@ -115,19 +115,20 @@ class AdminController extends Controller
     
     public function storeWaliSantri(Request $request) {
         $request->validate([
-            'name' => 'required',
-            'username' => 'required',
-            'email' => 'required',
-            'password' =>'required',
-        ]);
-    
+        'name' => 'required',
+        'username' => 'required|unique:users,username',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required',
+    ]);
+
         $data = $request->all();
-        $data['role'] = 'wali'; // Set default role
+        $data['role'] = 'wali';
         $data['password'] = bcrypt($request->password);
-    
+
         User::create($data);
-        return redirect()->route('admin.wali-santri.data-walisantri')->with('success', 'Wali Santri berhasil ditambahkan!');
+        return redirect()->route('admin.wali-santri.data-santri')->with('success', 'Wali Santri berhasil ditambahkan!');
     }
+
     
     public function editWaliSantri($id) {
         $users = User::findOrFail($id);
@@ -136,24 +137,38 @@ class AdminController extends Controller
     
     public function updateWaliSantri(Request $request, $id) {
         $users = User::findOrFail($id);
+
         $request->validate([
             'name' => 'required',
-            'username' => 'required',
-            'email' => 'required',
-            // 'password' =>'required',
+            'username' => 'required|unique:users,username,' . $id,
+            'email' => 'required|email|unique:users,email,' . $id,
+            'password' => 'nullable|min:6', // Opsional jika diisi
         ]);
-        $data = $request->all();
-        $data['role'] = 'wali'; // Set default role
-        $data['password'] = bcrypt($request->password);
+
+        // Hanya ambil field yang perlu
+        $data = [
+            'name' => $request->name,
+            'username' => $request->username,
+            'email' => $request->email,
+            'role' => 'wali',
+        ];
+
+        // Hanya update password jika diisi
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
+
         $users->update($data);
-        return redirect()->route('admin.wali-santri.data-walisantri')->with('success', 'Data wali santri diperbarui.');
+
+        return redirect()->route('admin.wali-santri.data-santri')->with('success', 'Data wali santri diperbarui.');
     }
+
     
     public function deleteWaliSantri($id) {
         $users = User::findOrFail($id);
         $users->delete();
     
-        return redirect()->route('admin.wali-santri.data-walisantri')->with('success', 'Data Wali santri dihapus.');
+        return redirect()->route('admin.wali-santri.data-santri')->with('success', 'Data Wali santri dihapus.');
     }
 
     // Pelanggaran
