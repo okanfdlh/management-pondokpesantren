@@ -23,66 +23,75 @@ class AdminController extends Controller
 
     // Data Santri
     public function dataSantri() {
-        $santris = Santri::all();
-        return view('admin.santri.data-santri', compact('santris'));
+        $santris = Santri::with('wali')->get();
+        $walis = User::where('role', 'wali')->get(); // pastikan role wali
+        return view('admin.santri.data-santri', compact('santris', 'walis'));
+    }
+    public function detailSantri($id)
+    {
+        $santri = Santri::with('wali', 'violations', 'achievements', 'permissions')->findOrFail($id);
+        return view('admin.santri.detail-santri', compact('santri'));
     }
     
     public function tambahSantri() {
-        return view('admin.santri.tambah-santri');
+        $walis = User::where('role', 'wali')->get();
+        return view('admin.santri.tambah-santri', compact('walis'));
     }
     
     public function storeSantri(Request $request) {
         $request->validate([
             'nis' => 'required|unique:santris,nis',
             'nama' => 'required',
-            'jenis_kelamin' => 'required',
+            'asrama' => 'required',
+            'kamar' => 'required',
+            'kelas' => 'required',
+            'jenis_kelamin' => 'required|in:L,P',
             'tanggal_lahir' => 'required|date',
             'alamat' => 'required',
+            'kelurahan' => 'required',
+            'kabupaten' => 'required',
             'tahun_ajaran' => 'required',
-            'status' => 'required',
-            'foto' => 'nullable|image|max:2048',
+            'status' => 'required|in:Aktif,Lulus,Cuti',
+            'wali_id' => 'nullable|exists:users,id',
         ]);
-    
-        $data = $request->all();
-        
-        if ($request->hasFile('foto')) {
-            $data['foto'] = $request->file('foto')->store('foto-santri', 'public');
-        }
-    
-        Santri::create($data);
-    
+
+        Santri::create($request->all());
+
         return redirect()->route('admin.santri.data-santri')->with('success', 'Santri berhasil ditambahkan!');
     }
+
     
     public function editSantri($id) {
         $santri = Santri::findOrFail($id);
-        return view('admin.santri.edit-santri', compact('santri'));
+        $walis = User::where('role', 'wali')->get();
+        return view('admin.santri.edit-santri', compact('santri', 'walis'));
     }
+
     
     public function updateSantri(Request $request, $id) {
         $santri = Santri::findOrFail($id);
-    
+
         $request->validate([
             'nis' => 'required|unique:santris,nis,' . $id,
             'nama' => 'required',
-            'jenis_kelamin' => 'required',
+            'asrama' => 'required',
+            'kamar' => 'required',
+            'kelas' => 'required',
+            'jenis_kelamin' => 'required|in:L,P',
             'tanggal_lahir' => 'required|date',
             'alamat' => 'required',
+            'kelurahan' => 'required',
+            'kabupaten' => 'required',
             'tahun_ajaran' => 'required',
-            'status' => 'required',
-            'foto' => 'nullable|image|max:2048',
+            'status' => 'required|in:Aktif,Lulus,Cuti',
+            'wali_id' => 'nullable|exists:users,id',
         ]);
-    
-        $data = $request->all();
-    
-        if ($request->hasFile('foto')) {
-            $data['foto'] = $request->file('foto')->store('foto-santri', 'public');
-        }
-    
-        $santri->update($data);
-    
+
+        $santri->update($request->all());
+
         return redirect()->route('admin.santri.data-santri')->with('success', 'Data santri diperbarui.');
     }
+
     
     public function deleteSantri($id) {
         $santri = Santri::findOrFail($id);

@@ -13,16 +13,23 @@ return new class extends Migration
     {
         Schema::create('santris', function (Blueprint $table) {
             $table->id();
-            $table->string('foto')->nullable();
+            // $table->string('foto')->nullable();
             $table->string('nis')->unique();     
             $table->string('nama');
+            $table->string('asrama');
+            $table->string('kamar');
+            $table->string('kelas');
             $table->enum('jenis_kelamin', ['L', 'P']);
             // $table->text('tempat_lahir');
             $table->date('tanggal_lahir');
             $table->text('alamat');
+            $table->string('kelurahan');
+            $table->string('kabupaten');
             // $table->string('no_hp_santri');
             $table->string('tahun_ajaran');      
             $table->enum('status', ['Aktif', 'Lulus', 'Cuti']);
+            // Tambahkan ini di migration `santris`
+            $table->foreignId('wali_id')->nullable()->constrained('users')->onDelete('set null');
             // $table->enum('status_keluarga', ['Lengkap', 'Yatim', 'Piatu','Yatim_Piatu']);
             $table->timestamps(); 
         });

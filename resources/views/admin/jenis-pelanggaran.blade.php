@@ -19,7 +19,7 @@
                 @foreach ($category->details as $detail)
                     <li class="flex items-center space-x-2">
                         <form method="POST" action="{{ route('admin.jenis-pelanggaran.update', $detail->id) }}" class="flex items-center space-x-2">
-                            @csrf
+                            @csrfphp
                             @method('PUT')
                             <input type="text" name="name" value="{{ $detail->name }}" class="border p-1 rounded w-64">
                             <button class="bg-yellow-500 text-white px-2 py-1 rounded">Update</button>

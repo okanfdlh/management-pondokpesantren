@@ -28,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
         // Santri
         Route::get('/santri/data-santri', [AdminController::class, 'dataSantri'])->name('admin.santri.data-santri');
         Route::get('/santri/tambah-santri', [AdminController::class, 'tambahSantri'])->name('admin.santri.tambah-santri');
+        Route::get('/santri/{id}/detail', [AdminController::class, 'detailSantri'])->name('admin.santri.detail-santri');
         Route::post('/santri', [AdminController::class, 'storeSantri'])->name('admin.santri.store');
         Route::get('/santri/edit-santri/{id}', [AdminController::class, 'editSantri'])->name('admin.santri.edit-santri');
         Route::put('/santri/{id}', [AdminController::class, 'updateSantri'])->name('admin.santri.update');
