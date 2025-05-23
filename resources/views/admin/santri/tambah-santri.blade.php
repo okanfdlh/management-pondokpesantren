@@ -30,6 +30,13 @@
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
+            <div>
+                <label class="block font-medium mb-1">No Telp Wali</label>
+                <input type="text" name="no_hp_walisantri" class="w-full border rounded px-3 py-2 @error('no_hp_walisantri') border-red-500 @enderror" value="{{ old('no_hp_walisantri') }}" placeholder="No Telp">
+                @error('no_hp_walisantri')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
             <div>
                 <label class="block font-medium mb-1">NIS</label>

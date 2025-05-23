@@ -25,11 +25,11 @@ return new class extends Migration
             $table->text('alamat');
             $table->string('kelurahan');
             $table->string('kabupaten');
-            // $table->string('no_hp_santri');
             $table->string('tahun_ajaran');      
             $table->enum('status', ['Aktif', 'Lulus', 'Cuti']);
             // Tambahkan ini di migration `santris`
             $table->foreignId('wali_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->string('no_hp_walisantri');
             // $table->enum('status_keluarga', ['Lengkap', 'Yatim', 'Piatu','Yatim_Piatu']);
             $table->timestamps(); 
         });

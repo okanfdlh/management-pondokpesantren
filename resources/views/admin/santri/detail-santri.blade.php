@@ -17,6 +17,7 @@
         <div><strong>Tahun Ajaran:</strong> {{ $santri->tahun_ajaran }}</div>
         <div><strong>Status:</strong> {{ $santri->status }}</div>
         <div><strong>Wali Santri:</strong> {{ $santri->wali?->name ?? '-' }}</div>
+        <div><strong>No Telp Wali:</strong> {{ $santri->no_hp_walisantri}}</div>
     </div>
 
     {{-- Kamu bisa tambahkan data relasi lain misalnya violations, achievements, permissions, repatriations --}}

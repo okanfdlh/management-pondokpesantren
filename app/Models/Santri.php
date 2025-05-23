@@ -25,6 +25,7 @@ class Santri extends Model
         'tahun_ajaran',
         'status',
         'wali_id',
+        'no_hp_walisantri',
     ];
     // public function user()
     // {

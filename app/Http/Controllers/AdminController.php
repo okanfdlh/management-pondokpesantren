@@ -53,6 +53,7 @@ class AdminController extends Controller
             'tahun_ajaran' => 'required',
             'status' => 'required|in:Aktif,Lulus,Cuti',
             'wali_id' => 'nullable|exists:users,id',
+            'no_hp_walisantri' => 'required',
         ]);
 
         Santri::create($request->all());
@@ -85,6 +86,7 @@ class AdminController extends Controller
             'tahun_ajaran' => 'required',
             'status' => 'required|in:Aktif,Lulus,Cuti',
             'wali_id' => 'nullable|exists:users,id',
+            'no_hp_walisantri' => 'required',
         ]);
 
         $santri->update($request->all());
