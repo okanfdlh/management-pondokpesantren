@@ -35,39 +35,21 @@
       <div class="p-6 text-center border-b border-white/20 relative">
         <button onclick="toggleSidebar(false)" class="absolute left-4 top-4 text-xl text-white lg:hidden">✕</button>
         <img src="https://www.bahrululumic.com/static/media/logo.bdf38093e82df3e22c5e.png" alt="Logo Pondok" class="h-16 mx-auto mb-2">
-        <h1 class="text-lg font-bold">Pondok Pesantren</h1>
+        <h1 class="text-lg font-bold">Management Karyawan</h1>
       </div>
       <nav class="p-4 space-y-3 text-sm">
         <a href="{{ url('/admin/dashboard') }}" class="block font-medium hover:bg-teal-700 p-2 rounded">Dashboard</a>
 
-        <span class="block text-xs text-white/50 mt-4">Data Master</span>
-        <a href="{{ url('/admin/santri/data-santri') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Data Santri</a>
-        <a href="{{ url('/admin/data-wali') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Data Wali Santri</a>
+        <a href="{{ url('/admin/dashboard') }}" class="block font-medium hover:bg-teal-700 p-2 rounded">Dashboard</a>
 
-        <span class="block text-xs text-white/50 mt-4">Pelanggaran</span>
-        <a href="{{ route('admin.jenis-pelanggaran') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Jenis Pelanggaran</a>
-        <a href="{{ url('/admin/input-pelanggaran') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Input Pelanggaran</a>
-        <a href="{{ url('/admin/riwayat-pelanggaran') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Riwayat Pelanggaran</a>
+        <span class="block text-xs text-white/50 mt-4">Data Karyawan</span>
+        <a href="{{ route('admin.karyawan.index') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Data Karyawan</a>
+        {{-- <a href="{{ route('admin.karyawan.gaji', $employee->id) }}" class="text-blue-600 hover:underline text-sm">History Gaji</a> --}}
 
-        <span class="block text-xs text-white/50 mt-4">Prestasi</span>
-        <a href="{{ url('/admin/jenis-prestasi') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Jenis Prestasi</a>
-        <a href="{{ url('/admin/input-prestasi') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Input Prestasi</a>
-        <a href="{{ url('/admin/riwayat-prestasi') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Riwayat Prestasi</a>
 
-        <span class="block text-xs text-white/50 mt-4">Perizinan</span>
-        {{-- <a href="{{ url('/admin/jenis-perizinan') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Jenis Perizinan</a> --}}
-        <a href="{{ url('/admin/pengajuan-masuk') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Pengajuan Masuk</a>
-        <a href="{{ url('/admin/riwayat-perizinan') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Riwayat Perizinan</a>
+        <span class="block text-xs text-white/50 mt-4">Gaji Karyawan</span>
+        <a href="{{ route('admin.salaries.index') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Info Gaji</a>
 
-        <span class="block text-xs text-white/50 mt-4">Kesehatan</span>
-        <a href="{{ url('/admin/riwayat-kesehatan') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Riwayat Kesehatan</a>
-
-        <span class="block text-xs text-white/50 mt-4">Perpulangan</span>
-        <a href="{{ url('/admin/pengajuan-perpulangan') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Pengajuan Perpulangan</a>
-        <a href="{{ url('/admin/riwayat-perpulangan') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Riwayat Perpulangan</a>
-
-        <span class="block text-xs text-white/50 mt-4">Pengaturan</span>
-        <a href="{{ url('/admin/profil') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Profil Saya</a>
       </nav>
     </div>
     <div class="p-4 border-t border-white/20">
@@ -89,40 +71,21 @@
     <aside class="fixed inset-y-0 left-0 w-64 bg-gradient-to-b from-teal-800 to-teal-900 text-white shadow-md hidden lg:flex flex-col justify-between overflow-y-auto z-40">
     <div>
       <div class="p-6 text-center border-b border-white/20">
-        <img src="https://www.bahrululumic.com/static/media/logo.bdf38093e82df3e22c5e.png" alt="Logo Pondok" class="h-16 mx-auto mb-2">
-        <h1 class="text-lg font-bold">Pondok Pesantren</h1>
+        {{-- <img src="https://www.bahrululumic.com/static/media/logo.bdf38093e82df3e22c5e.png" alt="Logo Pondok" class="h-16 mx-auto mb-2"> --}}
+        <h1 class="text-lg font-bold">Management Karyawan</h1>
       </div>
       <nav class="p-4 space-y-3 text-sm">
         <a href="{{ url('/admin/dashboard') }}" class="block font-medium hover:bg-teal-700 p-2 rounded">Dashboard</a>
 
-        <span class="block text-xs text-white/50 mt-4">Data Master</span>
-        <a href="{{ url('/admin/santri/data-santri') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Data Santri</a>
-        <a href="{{ url('/admin/data-wali') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Data Wali Santri</a>
+        <span class="block text-xs text-white/50 mt-4">Data Karyawan</span>
+        <a href="{{ route('admin.karyawan.index') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Data Karyawan</a>
 
-        <span class="block text-xs text-white/50 mt-4">Pelanggaran</span>
-        <a href="{{ url('/admin/jenis-pelanggaran') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Jenis Pelanggaran</a>
-        <a href="{{ url('/admin/input-pelanggaran') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Input Pelanggaran</a>
-        <a href="{{ url('/admin/riwayat-pelanggaran') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Riwayat Pelanggaran</a>
+        {{-- <span class="block text-xs text-white/50 mt-4">History Gaji</span>
+        <a href="{{ route('admin.karyawan.gaji', $employee->id) }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">History Gaji</a> --}}
 
-        <span class="block text-xs text-white/50 mt-4">Prestasi</span>
-        <a href="{{ url('/admin/jenis-prestasi') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Jenis Prestasi</a>
-        <a href="{{ url('/admin/input-prestasi') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Input Prestasi</a>
-        <a href="{{ url('/admin/riwayat-prestasi') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Riwayat Prestasi</a>
+        <span class="block text-xs text-white/50 mt-4">Gaji Karyawan</span>
+        <a href="{{ route('admin.salaries.index') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Info Gaji</a>
 
-        <span class="block text-xs text-white/50 mt-4">Perizinan</span>
-        <a href="{{ url('/admin/pengajuan-masuk') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Pengajuan Masuk</a>
-        <a href="{{ url('/admin/riwayat-perizinan') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Riwayat Perizinan</a>
-
-        <span class="block text-xs text-white/50 mt-4">Kesehatan</span>
-        <a href="{{ url('/admin/riwayat-kesehatan') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Riwayat Kesehatan</a>
-
-        <span class="block text-xs text-white/50 mt-4">Perpulangan</span>
-        <a href="{{ url('/admin/pengajuan-perpulangan') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Pengajuan Perpulangan</a>
-        <a href="{{ url('/admin/riwayat-perpulangan') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Riwayat Perpulangan</a>
-
-        <span class="block text-xs text-white/50 mt-4">Pengaturan</span>
-        <a href="{{ url('/admin/profil') }}" class="block hover:bg-teal-700 p-2 pl-4 rounded">Profil Saya</a>
-      </nav>
     </div>
     <div class="p-4 border-t border-white/20">
     <form method="POST" action="{{ route('logout') }}" id="logout-form">
