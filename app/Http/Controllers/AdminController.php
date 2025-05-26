@@ -2,420 +2,218 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Santri; // Tambahkan model Santri
-use App\Models\Violation;
 use App\Models\User;
-use App\Models\Achievement;
-use Illuminate\Support\Facades\Validator;
-use App\Models\Permission;
-use App\Models\ViolationCategory;
-use App\Models\ViolationDetail;
+use App\Models\Schedule;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    public function dashboard()
+    public function index()
     {
         return view('admin.dashboard');
     }
 
-    // Data Master
-
-    // Data Santri
-    public function dataSantri() {
-        $santris = Santri::with('wali')->get();
-        $walis = User::where('role', 'wali')->get(); // pastikan role wali
-        return view('admin.santri.data-santri', compact('santris', 'walis'));
-    }
-    public function detailSantri($id)
+    public function daftarUser(Request $request)
     {
-        $santri = Santri::with('wali', 'violations', 'achievements', 'permissions')->findOrFail($id);
-        return view('admin.santri.detail-santri', compact('santri'));
-    }
-    
-    public function tambahSantri() {
-        $walis = User::where('role', 'wali')->get();
-        return view('admin.santri.tambah-santri', compact('walis'));
-    }
-    
-    public function storeSantri(Request $request) {
-        $request->validate([
-            'nis' => 'required|unique:santris,nis',
-            'nama' => 'required',
-            'asrama' => 'required',
-            'kamar' => 'required',
-            'kelas' => 'required',
-            'jenis_kelamin' => 'required|in:L,P',
-            'tanggal_lahir' => 'required|date',
-            'alamat' => 'required',
-            'kelurahan' => 'required',
-            'kabupaten' => 'required',
-            'tahun_ajaran' => 'required',
-            'status' => 'required|in:Aktif,Lulus,Cuti',
-            'wali_id' => 'nullable|exists:users,id',
-            'no_hp_walisantri' => 'required',
-        ]);
+        $query = User::query();
 
-        Santri::create($request->all());
-
-        return redirect()->route('admin.santri.data-santri')->with('success', 'Santri berhasil ditambahkan!');
-    }
-
-    
-    public function editSantri($id) {
-        $santri = Santri::findOrFail($id);
-        $walis = User::where('role', 'wali')->get();
-        return view('admin.santri.edit-santri', compact('santri', 'walis'));
-    }
-
-    
-    public function updateSantri(Request $request, $id) {
-        $santri = Santri::findOrFail($id);
-
-        $request->validate([
-            'nis' => 'required|unique:santris,nis,' . $id,
-            'nama' => 'required',
-            'asrama' => 'required',
-            'kamar' => 'required',
-            'kelas' => 'required',
-            'jenis_kelamin' => 'required|in:L,P',
-            'tanggal_lahir' => 'required|date',
-            'alamat' => 'required',
-            'kelurahan' => 'required',
-            'kabupaten' => 'required',
-            'tahun_ajaran' => 'required',
-            'status' => 'required|in:Aktif,Lulus,Cuti',
-            'wali_id' => 'nullable|exists:users,id',
-            'no_hp_walisantri' => 'required',
-        ]);
-
-        $santri->update($request->all());
-
-        return redirect()->route('admin.santri.data-santri')->with('success', 'Data santri diperbarui.');
-    }
-
-    
-    public function deleteSantri($id) {
-        $santri = Santri::findOrFail($id);
-        $santri->delete();
-    
-        return redirect()->route('admin.santri.data-santri')->with('success', 'Data santri dihapus.');
-    }
-
-    // Data Wali Santri
-    public function dataWaliSantri()
-    {
-        $users = User::where('role', 'wali')->get(); // filter hanya wali
-        return view('admin.wali-santri.data-walisantri', compact('users'));
-    }
-
-    public function tambahWaliSantri() {
-        return view('admin.wali-santri.tambah-walisantri');
-    }
-    
-    public function storeWaliSantri(Request $request) {
-        $request->validate([
-        'name' => 'required',
-        'username' => 'required|unique:users,username',
-        'email' => 'required|email|unique:users,email',
-        'password' => 'required',
-    ]);
-
-        $data = $request->all();
-        $data['role'] = 'wali';
-        $data['password'] = bcrypt($request->password);
-
-        User::create($data);
-        return redirect()->route('admin.wali-santri.data-santri')->with('success', 'Wali Santri berhasil ditambahkan!');
-    }
-
-    
-    public function editWaliSantri($id) {
-        $users = User::findOrFail($id);
-        return view('admin.wali-santri.edit-walisantri', compact('users'));
-    }
-    
-    public function updateWaliSantri(Request $request, $id) {
-        $users = User::findOrFail($id);
-
-        $request->validate([
-            'name' => 'required',
-            'username' => 'required|unique:users,username,' . $id,
-            'email' => 'required|email|unique:users,email,' . $id,
-            'password' => 'nullable|min:6', // Opsional jika diisi
-        ]);
-
-        // Hanya ambil field yang perlu
-        $data = [
-            'name' => $request->name,
-            'username' => $request->username,
-            'email' => $request->email,
-            'role' => 'wali',
-        ];
-
-        // Hanya update password jika diisi
-        if ($request->filled('password')) {
-            $data['password'] = bcrypt($request->password);
+        // Filter berdasarkan nama
+        if ($request->has('search') && $request->search != '') {
+            $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        $users->update($data);
-
-        return redirect()->route('admin.wali-santri.data-santri')->with('success', 'Data wali santri diperbarui.');
-    }
-
-    
-    public function deleteWaliSantri($id) {
-        $users = User::findOrFail($id);
-        $users->delete();
-    
-        return redirect()->route('admin.wali-santri.data-santri')->with('success', 'Data Wali santri dihapus.');
-    }
-
-    // Pelanggaran
-    public function inputPelanggaran()
-    {
-        $santris = Santri::all();
-        $categories = ViolationCategory::with('details')->get();
-        return view('admin.input-pelanggaran', compact('santris', 'categories'));
-    }
-
-    public function storePelanggaran(Request $request)
-    {
-        $request->validate([
-            'santri_id' => 'required|exists:santris,id',
-            'violation_detail_id' => 'nullable|exists:violation_details,id',
-            'date' => 'required|date',
-        ]);
-
-        $detail = ViolationDetail::with('category')->find($request->violation_detail_id);
-
-        Violation::create([
-            'santri_id' => $request->santri_id,
-            'violation_type' => $detail && $detail->category ? $detail->category->name : 'lainnya',
-            'description' => $detail ? $detail->name : $request->description,
-            'date' => $request->date,
-            'violation_detail_id' => $request->violation_detail_id
-        ]);
-
-
-
-        return redirect()->back()->with('success', 'Pelanggaran berhasil ditambahkan!');
-    }
-
-    public function editPelanggaran($id)
-    {
-        $pelanggaran = Violation::with('violationDetail')->findOrFail($id);
-        $santris = Santri::all();
-        $categories = ViolationCategory::with('details')->get();
-        return view('admin.edit-pelanggaran', compact('pelanggaran', 'santris', 'categories'));
-    }
-
-
-    public function updatePelanggaran(Request $request, $id)
-    {
-        $request->validate([
-            'santri_id' => 'required|exists:santris,id',
-            'violation_detail_id' => 'nullable|exists:violation_details,id',
-            'date' => 'required|date',
-            'description' => 'nullable|string',
-            'violation_type' => 'nullable|string|max:255',
-        ]);
-
-        $pelanggaran = Violation::findOrFail($id);
-
-        // Jika violation_detail_id diisi, ambil kategori dan nama detail
-        if ($request->violation_detail_id) {
-            $detail = ViolationDetail::with('category')->find($request->violation_detail_id);
-            $pelanggaran->violation_detail_id = $request->violation_detail_id;
-            $pelanggaran->violation_type = $detail && $detail->category ? $detail->category->name : $request->violation_type;
-            $pelanggaran->description = $detail ? $detail->name : $request->description;
-        } else {
-            // Jika tidak ada detail, pakai data manual dari form
-            $pelanggaran->violation_detail_id = null;
-            $pelanggaran->violation_type = $request->violation_type;
-            $pelanggaran->description = $request->description;
+        // Filter berdasarkan role
+        if ($request->has('role') && $request->role != '') {
+            $query->where('role', $request->role);
         }
 
-        $pelanggaran->santri_id = $request->santri_id;
-        $pelanggaran->date = $request->date;
+        $users = $query->orderBy('created_at', 'desc')->get();
 
-        $pelanggaran->save();
-
-        return redirect()->route('admin.riwayat-pelanggaran')->with('success', 'Data pelanggaran berhasil diperbarui.');
+        return view('admin.daftar-user', compact('users'));
     }
 
 
-    public function deletePelanggaran($id)
+    public function tambahUser()
     {
-        $pelanggaran = Violation::findOrFail($id);
-        $pelanggaran->delete();
-
-    return redirect()->route('admin.riwayat-pelanggaran')->with('success', 'Data pelanggaran berhasil dihapus.');
+        return view('admin.tambah-user');
     }
-
-    public function riwayatPelanggaran()
+    public function tambahPengawas()
     {
-        $violations = Violation::with(['santri', 'violationDetail.category'])->latest()->get();
-        return view('admin.riwayat-pelanggaran', compact('violations'));
+        // Ambil user dengan role pengawas
+        $pengawas = User::where('role', 'pengawas')->get();
+
+        return view('admin.tambah-pengawas', compact('pengawas'));
     }
 
 
-    public function jenisPelanggaran()
+    public function jadwalPengawas(Request $request)
     {
-        $categories = ViolationCategory::with('details')->get();
-        return view('admin.jenis-pelanggaran', compact('categories'));
+        $query = \App\Models\Schedule::where('type', 'pengawas');
+
+        // Filter berdasarkan nama pengawas
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Filter berdasarkan tanggal
+        if ($request->filled('date')) {
+            $query->whereDate('day', $request->date);
+        }
+
+        $jadwals = $query->orderBy('day', 'asc')
+                        ->orderBy('time', 'asc')
+                        ->paginate(10); // Menampilkan 10 data per halaman
+
+        $jadwals->appends($request->all()); // Agar query string tetap saat pindah halaman
+
+        $pengawas = \App\Models\User::where('role', 'pengawas')->get();
+
+        return view('admin.jadwal-pengawas', compact('jadwals', 'pengawas'));
     }
 
-    public function storeJenisPelanggaran(Request $request)
+    public function jadwalAtlet(Request $request)
+        {
+            $query = Schedule::where('type', 'atlet');
+
+            // Filter berdasarkan nama
+            if ($request->filled('search')) {
+                $query->where('name', 'like', '%' . $request->search . '%');
+            }
+
+            // Filter berdasarkan tanggal
+            if ($request->filled('date')) {
+                $query->whereDate('day', $request->date);
+            }
+
+            $jadwals = $query->orderBy('day', 'asc')
+                            ->orderBy('time', 'asc')
+                            ->paginate(10);
+
+            $jadwals->appends($request->all());
+
+            return view('admin.jadwal-atlet', compact('jadwals'));
+        }
+
+
+    public function tambahAtlet()
     {
-        $request->validate([
-            'category' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-        ]);
-
-        $category = ViolationCategory::firstOrCreate(['name' => strtolower($request->category)]);
-        ViolationDetail::create([
-            'violation_category_id' => $category->id,
-            'name' => $request->name,
-        ]);
-
-        return redirect()->back()->with('success', 'Jenis pelanggaran berhasil ditambahkan.');
+        $atlets = User::where('role', 'atlet')->get();
+        return view('admin.tambah-atlet', compact('atlets'));
     }
-    public function updateJenisPelanggaran(Request $request, $id)
+    
+
+
+    public function storeUser(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6',
+            'role' => 'required|in:admin,pengawas,atlet',
         ]);
 
-        $detail = ViolationDetail::findOrFail($id);
-        $detail->name = $request->name;
-        $detail->save();
+        User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
+            'role' => $request->input('role'),
+        ]);
 
-        return redirect()->back()->with('success', 'Jenis pelanggaran berhasil diperbarui.');
+        return redirect()->route('admin.daftarUser')->with('success', 'User berhasil ditambahkan.');
+    }
+    // USER
+    public function editUser($id)
+    {
+        $user = User::findOrFail($id);
+        return view('admin.edit-user', compact('user'));
     }
 
-    public function deleteJenisPelanggaran($id)
+    public function updateUser(Request $request, $id)
     {
-        $detail = ViolationDetail::findOrFail($id);
-        $detail->delete();
+        try {
+            $user = User::findOrFail($id);
 
-        return redirect()->back()->with('success', 'Jenis pelanggaran berhasil dihapus.');
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email,' . $id,
+                'role' => 'required|in:admin,pengawas,atlet',
+            ]);
+
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'role' => $request->role,
+            ]);
+
+            return redirect()->route('admin.daftarUser')->with('success', 'User berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.daftarUser')->with('error', 'Gagal memperbarui user.');
+        }
+    }
+
+    public function destroyUser($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $user->delete();
+
+            return redirect()->route('admin.daftarUser')->with('success', 'User berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.daftarUser')->with('error', 'Gagal menghapus user.');
+        }
     }
 
 
 
-
-    // Prestasi
-    // public function jenisPrestasi()
-    // {
-    //     return view('admin.jenis-prestasi');
-    // }
-
-    public function inputPrestasi()
+    // JADWAL
+    public function editJadwal($id)
     {
-        $santris = Santri::all();
-        return view('admin.input-prestasi', compact('santris'));
+        $jadwal = Schedule::findOrFail($id);
+        return view('admin.edit-jadwal', compact('jadwal'));
     }
 
-    public function storePrestasi(Request $request)
+    public function updateJadwal(Request $request, $id)
     {
+        $jadwal = Schedule::findOrFail($id);
+
         $request->validate([
-            'santri_id' => 'required|exists:santris,id',
-            'achievement_type' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'date' => 'required|date',
+            'name' => 'required|string|max:255',
+            'day' => 'required|date',
+            'time' => 'required',
         ]);
-        Achievement::create($request->all());
-        return redirect() ->back() ->with('success', 'Prestasi berhasil ditambahkan');
-    }
 
-    public function editPrestasi($id)
-    {
-        $achievements=Achievement::findOrFail($id);
-        $santris = Santri::all();
-        return view('admin.edit-prestasi', compact('achievements', 'santris'));
-    }
-    
-    public function updatePrestasi(Request $request, $id)
-    {
-        $request->validate([
-            'santri_id' => 'required|exists:santris,id',
-            'achievement_type' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'date' => 'required|date',
+        $jadwal->update([
+            'name' => $request->name,
+            'day' => $request->day,
+            'time' => $request->time,
         ]);
-        $achievements = Achievement::findOrFail($id);
-        $achievements->update($request->all());
-        return redirect()->route('admin.riwayat-prestasi')->with('success', 'Data Prestasi berhasil diperbarui');
+
+        // Redirect sesuai tipe jadwal
+        if ($jadwal->type === 'pengawas') {
+            return redirect()->route('admin.jadwalPengawas')->with('success', 'Jadwal berhasil diperbarui.');
+        } elseif ($jadwal->type === 'atlet') {
+            return redirect()->route('admin.jadwalAtlet')->with('success', 'Jadwal berhasil diperbarui.');
+        }
+
+        // Default fallback redirect
+        return redirect()->route('admin.dashboard')->with('success', 'Jadwal berhasil diperbarui.');
     }
 
-    public function riwayatPrestasi()
+    public function destroyJadwal($id)
     {
-        $achievements = Achievement::with('santri')->latest()->get();
-        return view('admin.riwayat-prestasi', compact('achievements'));
-    }
-    
-    public function deletePrestasi($id)
-    {
-        $achievements = Achievement::findOrFail($id);
-        $achievements -> delete();
-        return redirect()->route('admin.riwayat-prestasi')-> with('sucess', 'Data prestasi berhasil dihapus');
-    }
+        $jadwal = Schedule::findOrFail($id);
+        $type = $jadwal->type;  // Simpan tipe dulu sebelum dihapus
+        $jadwal->delete();
 
+        if ($type === 'pengawas') {
+            return redirect()->route('admin.jadwalPengawas')->with('success', 'Jadwal berhasil dihapus.');
+        } elseif ($type === 'atlet') {
+            return redirect()->route('admin.jadwalAtlet')->with('success', 'Jadwal berhasil dihapus.');
+        }
 
-
-
-
-
-
-
-    // Perizinan
-    
-public function pengajuanMasuk()
-{
-    $permissions = Permission::with('santri')->orderBy('created_at', 'desc')->get();
-    return view('admin.pengajuan-masuk', compact('permissions'));
-}
-
-public function updateStatusPerizinan(Request $request, $id)
-{
-    $request->validate([
-        'status' => 'required|in:Diizinkan,Ditolak',
-    ]);
-
-    $permission = Permission::findOrFail($id);
-    $permission->status = $request->status;
-    $permission->save();
-
-    return redirect()->route('admin.pengajuan-masuk')->with('success', 'Status perizinan berhasil diperbarui.');
-}
-
-
-    public function riwayatPerizinan()
-    {
-        return view('admin.riwayat-perizinan');
+        return redirect()->route('admin.dashboard')->with('success', 'Jadwal berhasil dihapus.');
     }
 
-    // Kesehatan
-    public function riwayatKesehatan()
-    {
-        return view('admin.riwayat-kesehatan');
-    }
 
-    // Perpulangan
-    public function pengajuanPerpulangan()
-    {
-        return view('admin.pengajuan-perpulangan');
-    }
-
-    public function riwayatPerpulangan()
-    {
-        return view('admin.riwayat-perpulangan');
-    }
-
-    // Profil
-    public function profil()
-    {
-        return view('admin.profil');
-    }
 }

@@ -7,47 +7,41 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    // Menampilkan halaman login
     public function showLoginForm()
     {
-        return view('login'); // Ganti sesuai lokasi view login kamu
+        return view('auth.login');
     }
 
-    // Proses login
     public function login(Request $request)
     {
-        $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-        ]);
-
-        $credentials = $request->only('username', 'password');
+        $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            // Dapatkan role user yang login
-            $role = Auth::user()->role;
+            $user = Auth::user();
 
-            // Redirect berdasarkan role
-            if ($role === 'admin') {
-                return redirect()->intended('/admin/dashboard');
-            } elseif ($role === 'kesehatan') {
-                return redirect()->intended('/kesehatan/dashboard');
-            } elseif ($role === 'wali') {
-                return redirect()->intended('/wali/dashboard');
-            } else {
-                return redirect()->intended('/');
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            } elseif ($user->role === 'pengawas') {
+                return redirect()->route('pengawas.jenisLatihan');
+            } elseif ($user->role === 'atlet') {
+                return redirect()->route('atlet.dashboard');
             }
+
+            return redirect('/');
         }
 
-        return back()->withErrors(['login_error' => 'Username atau password salah!']);
+        return back()->with('error', 'Email atau Password salah.');
     }
 
-    // Proses logout
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
-        return redirect('/login')->with('success', 'Anda telah logout.');
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }
