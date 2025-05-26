@@ -7,64 +7,50 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-/**
- * Model User
- * Merepresentasikan data pengguna dalam sistem autentikasi Laravel.
- * Berelasi satu-satu dengan model Employee.
- */
 class User extends Authenticatable
 {
-    /**
-     * Trait HasFactory digunakan untuk mendukung fitur factory (biasanya untuk seeding/testing).
-     * Trait Notifiable memungkinkan model menerima notifikasi.
-     */
+    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
-     * Atribut yang boleh diisi secara massal (mass assignment).
+     * The attributes that are mass assignable.
      *
      * @var list<string>
      */
+    protected $table = 'users';
     protected $fillable = [
-        'name',     // Nama lengkap user
-        'email',    // Email user (digunakan untuk login)
-        'password', // Password (akan di-hash oleh Laravel)
-        'role',     // Role user (misal: admin, karyawan)
+        'name',
+        'username',
+        'email',
+        'password',
+        'role',
     ];
 
     /**
-     * Atribut yang disembunyikan saat model diserialisasi ke array/JSON.
-     * Biasanya untuk alasan keamanan.
+     * The attributes that should be hidden for serialization.
      *
      * @var list<string>
      */
     protected $hidden = [
-        'password',        // Menyembunyikan password dari output JSON
-        'remember_token',  // Token "remember me"
+        'password',
+        'remember_token',
     ];
 
     /**
-     * Tipe casting untuk atribut tertentu.
-     * Casting ini mengatur bagaimana data disimpan dan ditampilkan.
+     * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime', // Konversi otomatis menjadi objek Carbon
-            'password' => 'hashed',            // Otomatis hash saat diset
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
         ];
     }
-
-    /**
-     * Relasi one-to-one antara User dan Employee.
-     * Seorang user dapat memiliki satu data karyawan.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function employee()
+    public function santris()
     {
-        return $this->hasOne(Employee::class);
+        return $this->hasMany(Santri::class, 'wali_id');
     }
+
 }

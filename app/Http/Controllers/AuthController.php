@@ -7,68 +7,47 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    /**
-     * Menampilkan halaman form login.
-     *
-     * @return \Illuminate\View\View
-     */
+    // Menampilkan halaman login
     public function showLoginForm()
     {
-        // Menampilkan view login (pastikan file view 'login.blade.php' ada)
-        return view('login');
+        return view('login'); // Ganti sesuai lokasi view login kamu
     }
 
-    /**
-     * Memproses permintaan login dari form login.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
+    // Proses login
     public function login(Request $request)
     {
-        // Validasi input login agar email dan password wajib diisi
         $request->validate([
-            'email' => 'required',
+            'username' => 'required',
             'password' => 'required',
         ]);
 
-        // Ambil hanya field email dan password dari request
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('username', 'password');
 
-        // Proses otentikasi menggunakan kredensial
         if (Auth::attempt($credentials)) {
-            // Regenerasi session untuk keamanan (mencegah session fixation)
             $request->session()->regenerate();
 
-            // Ambil role user yang sedang login
+            // Dapatkan role user yang login
             $role = Auth::user()->role;
 
-            // Redirect ke dashboard sesuai role
-            switch ($role) {
-                case 'admin':
-                    return redirect()->route('admin.dashboard'); // Pastikan route ini sudah dibuat
-                case 'karyawan':
-                    return redirect()->route('karyawan.dashboard'); // Pastikan route ini sudah dibuat
+            // Redirect berdasarkan role
+            if ($role === 'admin') {
+                return redirect()->intended('/admin/dashboard');
+            } elseif ($role === 'kesehatan') {
+                return redirect()->intended('/kesehatan/dashboard');
+            } elseif ($role === 'wali') {
+                return redirect()->intended('/wali/dashboard');
+            } else {
+                return redirect()->intended('/');
             }
         }
 
-        // Jika login gagal, kembalikan ke form login dengan pesan error
-        return back()->withErrors([
-            'login_error' => 'Username atau password salah!',
-        ]);
+        return back()->withErrors(['login_error' => 'Username atau password salah!']);
     }
 
-    /**
-     * Logout user dari sistem dan arahkan ke halaman utama.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
+    // Proses logout
     public function logout()
     {
-        // Logout user dari sesi
         Auth::logout();
-
-        // Redirect ke halaman utama dengan pesan sukses
-        return redirect('/')->with('success', 'Anda telah logout.');
+        return redirect('/login')->with('success', 'Anda telah logout.');
     }
 }
