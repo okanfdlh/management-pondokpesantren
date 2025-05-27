@@ -15,7 +15,10 @@
         </div>
     @endif
 
+<<<<<<< HEAD
     <div class="bg-white shadow rounded-xl p-6">
+=======
+>>>>>>> d53a04c984fd556d50eb9b7e681083cae80e2b4e
     <form action="{{ route('admin.santri.update', $santri->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
         @method('PUT')
