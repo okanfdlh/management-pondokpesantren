@@ -1,40 +1,69 @@
 @extends('layouts.admin')
 
 @section('content')
-<main class="p-6">
-    <h2 class="text-xl font-semibold mb-4">Jenis Pelanggaran</h2>
+<main class="p-6 md:p-8 max-w-full">
+    <h2 class="text-2xl md:text-3xl font-bold mb-6 text-gray-800 border-b border-gray-200 pb-3">Manajemen Jenis Pelanggaran</h2>
 
-    <form method="POST" action="{{ route('admin.jenis-pelanggaran.store') }}" class="mb-6">
-        @csrf
-        <div class="flex items-center space-x-4 mb-2">
-            <input type="text" name="category" placeholder="Kategori baru (misal: ringan)" class="border p-2 rounded">
-            <input type="text" name="name" placeholder="Detail pelanggaran (misal: makan berdiri)" class="border p-2 rounded w-full">
-            <button class="bg-blue-600 text-white px-4 py-2 rounded">Tambah</button>
-        </div>
-    </form>
+    {{-- Form Tambah Jenis Pelanggaran --}}
+    <div class="bg-white shadow rounded-xl p-6 mb-10">
+        <h3 class="text-lg font-semibold text-gray-700 mb-4">Tambah Jenis Pelanggaran</h3>
+        <form method="POST" action="{{ route('admin.jenis-pelanggaran.store') }}" class="space-y-6">
+            @csrf
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label for="category" class="block text-sm font-medium text-gray-600 mb-1">Kategori</label>
+                    <select name="category" id="category" required class="w-full border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+                        <option value="" disabled selected>Pilih Kategori</option>
+                        <option value="ringan">Ringan</option>
+                        <option value="sedang">Sedang</option>
+                        <option value="berat">Berat</option>
+                    </select>
+                </div>
+                <div class="md:col-span-2">
+                    <label for="name" class="block text-sm font-medium text-gray-600 mb-1">Detail Pelanggaran</label>
+                    <input type="text" name="name" id="name" placeholder="Contoh: Makan sambil berdiri" required class="w-full border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+                </div>
+            </div>
+            <div class="text-right">
+                <button type="submit" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow-sm">
+                    + Tambah
+                </button>
+            </div>
+        </form>
+    </div>
+
+    {{-- Daftar Pelanggaran Berdasarkan Kategori --}}
     @foreach ($categories as $category)
-        <div class="mb-4">
-            <h3 class="font-semibold">{{ ucfirst($category->name) }}</h3>
-            <ul class="list-disc pl-6 text-gray-700 space-y-2">
-                @foreach ($category->details as $detail)
-                    <li class="flex items-center space-x-2">
-                        <form method="POST" action="{{ route('admin.jenis-pelanggaran.update', $detail->id) }}" class="flex items-center space-x-2">
-                            @csrfphp
+        <div class="bg-white shadow rounded-xl mb-6">
+            <div class="bg-blue-100 px-6 py-4 rounded-t-xl border-b border-blue-200">
+                <h4 class="text-lg font-semibold text-blue-800">{{ ucfirst($category->name) }}</h4>
+            </div>
+            <ul class="divide-y divide-gray-200">
+                @forelse ($category->details as $detail)
+                    <li class="px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                        <form method="POST" action="{{ route('admin.jenis-pelanggaran.update', $detail->id) }}" class="flex flex-col md:flex-row md:items-center w-full gap-3">
+                            @csrf
                             @method('PUT')
-                            <input type="text" name="name" value="{{ $detail->name }}" class="border p-1 rounded w-64">
-                            <button class="bg-yellow-500 text-white px-2 py-1 rounded">Update</button>
+                            <input type="text" name="name" value="{{ $detail->name }}" class="w-full md:w-2/3 border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+                            <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white font-medium px-4 py-2 rounded-lg shadow-sm">
+                                Simpan
+                            </button>
                         </form>
                         <form method="POST" action="{{ route('admin.jenis-pelanggaran.delete', $detail->id) }}" onsubmit="return confirm('Yakin ingin menghapus?')">
                             @csrf
                             @method('DELETE')
-                            <button class="bg-red-600 text-white px-2 py-1 rounded">Hapus</button>
+                            <button class="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-lg shadow-sm">
+                                Hapus
+                            </button>
                         </form>
                     </li>
-                @endforeach
+                @empty
+                    <li class="px-6 py-4 text-gray-500 italic">Belum ada pelanggaran dalam kategori ini.</li>
+                @endforelse
             </ul>
         </div>
     @endforeach
-
+    
 </main>
 
 @endsection
