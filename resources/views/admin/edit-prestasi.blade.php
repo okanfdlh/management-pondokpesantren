@@ -1,8 +1,8 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container mx-auto bg-white p-6 rounded shadow">
-    <h1 class="text-xl font-bold mb-4">Edit Prestasi</h1>
+<div class="p-6 bg-gray-50 min-h-screen">
+    <h1 class="text-2xl font-bold mb-6 text-gray-700">Edit Prestasi</h1>
 
     <form action="{{ route('admin.update-prestasi', $achievements->id) }}" method="POST">
         @csrf
@@ -34,7 +34,7 @@
             <input type="date" name="date" value="{{ $achievements->date }}" class="w-full border rounded p-2">
         </div>
 
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Update</button>
+        <button type="submit" class="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700">Update</button>
     </form>
 </div>
 @endsection

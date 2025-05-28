@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container mx-auto bg-white p-6 rounded shadow">
+<div class="p-6 bg-gray-50 min-h-screen">
     <h1 class="text-2xl font-bold mb-6 text-gray-700">Riwayat Prestasi</h1>
 
     @if(session('success'))
@@ -10,10 +10,10 @@
         </div>
     @endif
 
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto bg-white rounded-xl shadow-lg">
         <table class="min-w-full bg-white border border-gray-200 rounded">
-            <thead>
-                <tr class="bg-gray-100 text-gray-700">
+            <thead class="bg-teal-600 text-white">
+                <tr class="bg-teal-600 text-white">
                     <th class="border px-6 py-3 text-left text-sm font-medium">Santri</th>
                     <th class="border px-6 py-3 text-left text-sm font-medium">Jenis Prestasi</th>
                     <th class="border px-6 py-3 text-left text-sm font-medium">Deskripsi</th>

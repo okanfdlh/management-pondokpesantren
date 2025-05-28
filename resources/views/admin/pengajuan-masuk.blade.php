@@ -2,12 +2,12 @@
 
 @section('content')
 {{-- <main class="p-6">
-  <h2 class="text-xl font-semibold mb-4">Pengajuan Masuk</h2>
+  <h2 class="text-2xl font-bold mb-6 text-gray-700">Pengajuan Masuk</h2>
   <p class="text-gray-600">Lihat dan kelola pengajuan izin masuk pondok oleh santri.</p>
 </main> --}}
 
 <main class="p-6">
-    <h2 class="text-xl font-semibold mb-4">Pengajuan Masuk</h2>
+    <h2 class="text-2xl font-bold mb-6 text-gray-700">Pengajuan Masuk</h2>
     <p class="text-gray-600 mb-4">Lihat dan kelola pengajuan izin masuk pondok oleh santri.</p>
 
     @if(session('success'))
@@ -16,9 +16,9 @@
         </div>
     @endif
 
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto bg-white rounded-xl shadow-lg">
         <table class="w-full table-auto border-collapse border border-gray-300">
-            <thead class="bg-gray-100">
+            <thead class="bg-teal-600 text-white">
                 <tr>
                     <th class="border px-4 py-2">Nama Santri</th>
                     <th class="border px-4 py-2">Kategori</th>
