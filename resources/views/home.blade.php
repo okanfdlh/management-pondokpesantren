@@ -55,8 +55,8 @@
             <div class="w-full md:w-1/2 text-center md:text-left">
                 <h2 class="text-3xl md:text-5xl font-bold leading-tight">Sistem Informasi Pondok Pesantren</h2>
                 <p class="mt-4 md:mt-6 text-base md:text-lg opacity-90">
-                    Aplikasi ini membantu dalam pengelolaan santri, izin, pelanggaran, prestasi, serta rekam medis santri.
-                    Didesain untuk memudahkan wali santri dalam memantau perkembangan anaknya di pondok pesantren.
+                    Sistem ini membantu dalam pengelolaan santri, izin, pelanggaran, prestasi, serta rekam medis santri.
+                    Didesain untuk memudahkan wali santri dalam memantau perkembangan santri di pondok pesantren.
                 </p>
             </div>
             <!-- Gambar -->

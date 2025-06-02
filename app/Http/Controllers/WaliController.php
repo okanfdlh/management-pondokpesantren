@@ -39,8 +39,9 @@ class WaliController extends Controller
             'kategori_perizinan' => $request->kategori_perizinan,
             'reason' => $request->reason,
             'request_date' => $request->request_date,
-            // 'tanggal_selesai' => $request->tanggal_selesai,
+            'catatan' => '-', // Tambahkan ini
         ]);
+
 
         return redirect()->route('wali.perizinan.form')->with('success', 'Pengajuan berhasil dikirim.');
     }

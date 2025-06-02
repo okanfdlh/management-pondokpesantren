@@ -2,8 +2,8 @@
 
 @section('content')
 
-<div class="container mx-auto max-w-md bg-white p-6 rounded shadow">
-    <h1 class="text-xl font-bold mb-4">Tambah Rekam Medis Santri</h1>
+<div class="p-6 bg-gray-50 min-h-screen">
+    <h1 class="text-2xl font-bold mb-6 text-gray-700">Tambah Rekam Medis</h1>
 
     @if (session('success'))
         <div class="bg-green-100 text-green-700 px-4 py-2 rounded mb-4">
@@ -11,6 +11,7 @@
         </div>
     @endif
 
+    
     <form action="{{ route('kesehatan.storeRekamMedis') }}" method="POST">
         @csrf
         <div class="mb-4">
@@ -65,7 +66,7 @@
             @enderror
         </div>
 
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        <button type="submit" class="bg-teal-600 text-white px-4 py-2 rounded hover:bg-blue-700">
             Simpan
         </button>
     </form>

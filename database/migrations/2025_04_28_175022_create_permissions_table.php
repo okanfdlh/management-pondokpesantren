@@ -19,8 +19,8 @@ return new class extends Migration
  // Being Accepted, Rejected, or InProcessing
             $table->text('reason');
             $table->date('request_date');
-            $table->date('tanggal_selesai');
-            $table->text('catatan');
+            $table->date('tanggal_selesai')->nullable();
+            $table->text('catatan')->nullable()->change();
             $table->timestamps();
         });
 
